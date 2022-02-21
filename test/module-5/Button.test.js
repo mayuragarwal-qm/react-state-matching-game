@@ -24,9 +24,10 @@ describe("Button", () => {
       Button = require("../../refactor/components/Button").default;
       wrapper = shallow(<Button />);
     } catch (error) {
+      debugger;
       expect(
         false,
-        "Did you copy over the src directory into a new directory refactor?"
+        "Did you copy over the src directory into a new directory refactors?"
       ).toBe(true);
     }
 

@@ -1,11 +1,11 @@
 import GameContext from "../../GameContext.js";
 import "./Button.css";
 
-const Button = () => (
+const Button = (props) => (
   <GameContext.Consumer>
-    {({ playing, startGame }) => {
-      <button onClick={startGame}>{playing ? "reset" : "start"}</button>;
-    }}
+    {({ playing, startGame }) => (
+      <button onClick={startGame}>{playing ? "reset" : "start"}</button>
+    )}
   </GameContext.Consumer>
 );
 
