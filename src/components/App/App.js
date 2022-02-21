@@ -1,7 +1,7 @@
 import React from "react";
 import OptionsPanel from "../OptionsPanel";
 import Board from "../Board";
-import { createTiles } from "../../misc/utils";
+import { createTiles, indexOfSelected } from "../../misc/utils";
 
 import "./App.css";
 
@@ -19,11 +19,57 @@ class App extends React.Component {
 
   startGame = () => {
     this.setState({
-      numTiles: 36,
       playing: true,
       previousTileIndex: null,
-      tiles: createTiles(this.state.numTiles),
+      tiles: createTiles(this.state.numTiles, this.handleTileClicked),
       toBeCleared: null,
+    });
+  };
+
+  handleTileClicked = (id, color) => {
+    this.setState((state) => {
+      const tiles = state.tiles;
+
+      // Find the selected tile
+      let selectedTileIndex = indexOfSelected(tiles, id, color);
+      let previousTileIndex = state.previousTileIndex;
+      let toBeCleared = state.toBeCleared;
+
+      // Clearing mismatched tiles
+      if (toBeCleared != null) {
+        tiles[toBeCleared[0]].selected = false;
+        tiles[toBeCleared[1]].selected = false;
+        toBeCleared = null;
+      }
+
+      tiles[selectedTileIndex].selected = true;
+
+      if (previousTileIndex !== null) {
+        let previousTile = tiles[previousTileIndex];
+        let selectedTile = tiles[selectedTileIndex];
+
+        // Handling a matched tile
+        if (
+          previousTile.id != selectedTile.id &&
+          previousTile.color == selectedTile.color
+        ) {
+          selectedTile.matched = true;
+          previousTile.matched = true;
+        } else {
+          // Handling a mismatched tile
+          toBeCleared = [previousTileIndex, selectedTileIndex];
+        }
+
+        previousTileIndex = null;
+      } else {
+        previousTileIndex = selectedTileIndex;
+      }
+
+      return {
+        tiles,
+        toBeCleared,
+        previousTileIndex,
+      };
     });
   };
 
