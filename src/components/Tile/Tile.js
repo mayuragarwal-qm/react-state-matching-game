@@ -1,13 +1,19 @@
-import React from 'react'
+import React from "react";
 
-import './Tile.css'
+import "./Tile.css";
 
-const Tile = () => {
+const Tile = (props) => {
+  const isSelectedOrMatched = props.selected === true || props.matched === true;
+
+  const dynamicColor = isSelectedOrMatched
+    ? { backgroundColor: props.color }
+    : null;
 
   return (
-    <div className='Tile'>
+    <div className="Tile" style={dynamicColor}>
+      {isSelectedOrMatched && props.svg}
     </div>
-  )
-}
+  );
+};
 
-export default Tile
+export default Tile;
